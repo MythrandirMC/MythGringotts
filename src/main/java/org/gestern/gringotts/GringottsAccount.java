@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -71,13 +72,15 @@ public class GringottsAccount {
      * @return current balance of this account in cents
      */
     public long getBalance() {
-        CompletableFuture<Long> cents     = getCents();
-        CompletableFuture<Long> playerInv = countPlayerInventory();
-        CompletableFuture<Long> chestInv  = countChestInventories();
+        CompletableFuture<Long> cents            = getCents();
+        CompletableFuture<Long> playerInv        = countPlayerInventory();
+        CompletableFuture<Long> playerEnderchest = countPlayerEnderchest();
+        CompletableFuture<Long> chestInv         = countChestInventories();
 
-        // order of combination is important, because chestInv/playerInv might have to run on main thread
+        // order of combination is important, because chestInv/playerInv/enderchest might have to run on main thread
         CompletableFuture<Long> f = chestInv
                 .thenCombine(playerInv, Long::sum)
+                .thenCombine(playerEnderchest, Long::sum)
                 .thenCombine(cents, Long::sum);
 
         return getTimeout(f);
@@ -130,6 +133,10 @@ public class GringottsAccount {
         CompletableFuture<Long> f         = cents.thenCombine(playerInv, Long::sum);
 
         return getTimeout(f);
+    }
+
+    public long getEndBalance() {
+        return getTimeout(countPlayerEnderchest());
     }
 
     /**
@@ -298,8 +305,8 @@ public class GringottsAccount {
     }
 
     public long addToShulkerBox(long remaining, Inventory inventory) {
-        for (ItemStack itemStack : inventory.all(Material.SHULKER_BOX).values()) {
-            if (itemStack.getItemMeta() instanceof BlockStateMeta) {
+        for (ItemStack itemStack : inventory.getContents()) {
+            if (Tag.SHULKER_BOXES.isTagged(itemStack.getType()) && itemStack.getItemMeta() instanceof BlockStateMeta) {
                 BlockStateMeta blockState = (BlockStateMeta) itemStack.getItemMeta();
                 if (blockState.getBlockState() instanceof ShulkerBox) {
                     ShulkerBox shulkerBox = (ShulkerBox) blockState.getBlockState();
@@ -321,8 +328,8 @@ public class GringottsAccount {
     }
 
     public long removeFromShulkerBox(long remaining, Inventory inventory) {
-        for (ItemStack itemStack : inventory.all(Material.SHULKER_BOX).values()) {
-            if (itemStack.getItemMeta() instanceof BlockStateMeta) {
+        for (ItemStack itemStack : inventory.getContents()) {
+            if (Tag.SHULKER_BOXES.isTagged(itemStack.getType()) && itemStack.getItemMeta() instanceof BlockStateMeta) {
                 BlockStateMeta blockState = (BlockStateMeta) itemStack.getItemMeta();
                 if (blockState.getBlockState() instanceof ShulkerBox) {
                     ShulkerBox shulkerBox = (ShulkerBox) blockState.getBlockState();
@@ -375,14 +382,6 @@ public class GringottsAccount {
                 }
             }
 
-            Optional<Player> playerOpt = playerOwner();
-            if (playerOpt.isPresent()) {
-                Player player = playerOpt.get();
-
-                if (Configuration.CONF.useVaultEnderChest && Permissions.USE_VAULT_ENDERCHEST.isAllowed(player)) {
-                    balance += new AccountInventory(player.getEnderChest()).balance();
-                }
-            }
             return balance;
         };
 
@@ -437,6 +436,22 @@ public class GringottsAccount {
                 Player player = playerOpt.get();
 
                 balance += new AccountInventory(player.getInventory()).balance();
+            }
+            return balance;
+        };
+
+        return callSync(callMe);
+    }
+
+    private CompletableFuture<Long> countPlayerEnderchest() {
+        Callable<Long> callMe = () -> {
+            long balance = 0;
+
+            Optional<Player> playerOpt = playerOwner();
+            if (playerOpt.isPresent() && Permissions.USE_VAULT_ENDERCHEST.isAllowed(playerOpt.get())) {
+                Player player = playerOpt.get();
+
+                balance += new AccountInventory(player.getEnderChest()).balance();
             }
             return balance;
         };

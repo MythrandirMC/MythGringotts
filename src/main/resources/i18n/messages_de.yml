@@ -3,6 +3,7 @@ noperm: "Du hast keine Berechtigung, Geld zu überweisen."
 balance: "Du hast zur Zeit insgesamt %balance"
 vault_balance: "In Tresoren: %balance"
 inv_balance: "Im Inventar: %balance"
+end_balance: "Im Enderchest: %balance"
 invalidaccount: "Ungültiger Spieler: %player"
 reload: "Gringotts: Einstellungen neu geladen!"
 
@@ -42,16 +43,8 @@ vault:
     noVaultPerm: "Du hast keine Erlaubnis hier einen Tresor zu erstellen."
 
 plugins:
-    towny:
-        noTownVaultPerm: "Du kannst hier keinen Town-Tresor erstellen."
-        noTownResident: "Du kannst keine Town-Tresor erstellen, weil du nicht Bürger einer Town bist."
-        noNationVaultPerm: "Du kannst hier keine Nation-Tresore erstellen."
-        notInNation: "Du kannst keine Nation-Tresore erstellen, weil du nicht Bürger einer Nation bist"
     vault:
         insufficientFunds: "Nicht genug Geld."
         insufficientSpace: "Nicht genug Platz."
         unknownError: "Unbekannter Fehler."
         notImplemented: "Gringotts unterstützt keine Banken."
-    faction:
-        noFactionVaultPerm: "Du kannst hier keinen Faction-Tresor erstellen."
-        notInFaction: "Du kannst keinen Faction-Tresor erstellen, weil du nicht in einer Faction bist."

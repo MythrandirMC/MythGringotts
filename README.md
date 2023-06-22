@@ -6,7 +6,10 @@ currency value and money transactions are based on actual items in Minecraft, pe
 a greater level of immersion, a generally more Minecraft-like feeling, and in the case of a PvP environment, making the
 currency itself vulnerable to raiding.
 
-Get Gringotts [from Spigot](https://www.spigotmc.org/resources/gringotts.42071/)!
+### Get Gringotts
+
+- [from Spigot](https://www.spigotmc.org/resources/gringotts.42071/)
+- [from Hangar](https://hangar.papermc.io/nikosgram/Gringotts)
 
 Features
 --------
@@ -17,14 +20,12 @@ Features
 * Direct account-to-account transfers commands
 * Optional transaction taxes
 * Fractional currency values (fixed decimal digits)
-* Account support for [Towny](https://www.spigotmc.org/resources/towny-advanced.72694/)
-* [Vault](https://www.spigotmc.org/resources/vault.34315/)
-  and [Reserve](https://www.spigotmc.org/resources/reserve.50739/) integration
+* [Vault](https://www.spigotmc.org/resources/vault.34315/) integration
 
 Usage
 -----
 Storing money in an account requires a Gringotts vault. A vault consists of a container, which can be either chest,
-dispenser or furnace, and a sign above or on it declaring it as a vault. A player or faction may claim any number of
+dispenser or furnace, and a sign above or on it declaring it as a vault. A player may claim any number of
 vaults. Vaults are not protected from access through other players. If you would like them to be, you may use additional
 plugins such as [LWC](https://dev.bukkit.org/projects/lwc/) or [WorldGuard](https://dev.bukkit.org/projects/worldguard/)
 .
@@ -80,7 +81,7 @@ Metrics
   <img src="https://contrib.rocks/image?repo=nikosgram/gringotts"  alt="Gringotts contributors"/>
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
+Made with [contrib.rocks](https://contrib.rocks/preview?repo=nikosgram%2Fgringotts)
 
 License
 -------

@@ -1,6 +1,9 @@
 package org.gestern.gringotts.api;
 
 import org.bukkit.Location;
+import org.gestern.gringotts.AccountChest;
+
+import java.util.Collection;
 
 /**
  * Defines actions possible on an account in an economy.
@@ -72,6 +75,13 @@ public interface Account {
      * @return the inventory balance of this account.
      */
     double invBalance();
+
+    /**
+     * Return the enderchest balance of this account.
+     *
+     * @return the enderchest balance of this account.
+     */
+    double endBalance();
 
     /**
      * Return whether this account has at least the specified amount.
@@ -152,4 +162,19 @@ public interface Account {
      * @param message the message to send.
      */
     void message(String message);
+
+    /**
+     * Checks whenever the account owner has the following permission
+     *
+     * @param permission the required permission
+     * @return whenever the account owner has the permission
+     */
+    boolean hasPermission(String permission);
+
+    /**
+     * Returns a collection of all the relevant chest vaults of this account
+     *
+     * @return relevant chest vaults
+     */
+    Collection<AccountChest> getVaultChests();
 }

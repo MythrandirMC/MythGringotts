@@ -71,6 +71,10 @@ public enum Configuration {
      */
     public boolean balanceShowInventory = true;
     /**
+     * Balance command shows enderchest balance
+     */
+    public boolean balanceShowEnderchest = true;
+    /**
      * if true, the denomination finding process will include shulker boxes
      */
     public boolean includeShulkerBoxes = true;
@@ -162,8 +166,9 @@ public enum Configuration {
         CONF.useVaultContainer   = savedConfig.getBoolean("usevault.container", true);
         CONF.includeShulkerBoxes = savedConfig.getBoolean("usevault.include-shulker-boxes", true);
 
-        CONF.balanceShowInventory = savedConfig.getBoolean("balance.show-inventory", true);
-        CONF.balanceShowVault     = savedConfig.getBoolean("balance.show-vault", true);
+        CONF.balanceShowInventory  = savedConfig.getBoolean("balance.show-inventory", true);
+        CONF.balanceShowVault      = savedConfig.getBoolean("balance.show-vault", true);
+        CONF.balanceShowEnderchest = savedConfig.getBoolean("balance.show-enderchest", true);
 
         CONF.language = savedConfig.getString("language", "custom");
 
@@ -194,16 +199,20 @@ public enum Configuration {
 
                     ItemStack denomType = itemByName(materialName);
 
+                    // Allow loading a serialized meta block and overriding it with the other fields
+                    ItemMeta meta = denomConf.getSerializable("meta", ItemMeta.class);
+                    // Default to the item's default meta if the one in the config doesn't exist
+                    if (meta == null) {
+                        meta = denomType.getItemMeta();
+                    }
+
                     if (denomConf.contains("damage")) {
                         short damage = (short) denomConf.getInt("damage"); // returns 0 when path is unset
-                        ItemMeta meta = denomType.getItemMeta();
                         if (meta != null) {
                             ((Damageable) meta).setDamage(damage);
                             denomType.setItemMeta(meta);
                         }
                     }
-
-                    ItemMeta meta = denomType.getItemMeta();
 
                     if (meta == null) {
                         continue;

@@ -22,8 +22,18 @@ public enum Language {
     public String balance;
     public String vault_balance;
     public String inv_balance;
+    public String end_balance;
     public String invalid_account;
     public String reload;
+    public String added_denomination;
+    public String invalid_number;
+
+    // Adding a denomination
+    public String hold_item;
+    public String missing_value;
+    public String invalid_value;
+    public String denomination_name;
+    public String denomination_value;
     //pay command
     public String pay_success_tax;
     public String pay_success_sender;
@@ -50,11 +60,6 @@ public enum Language {
     public String vault_created;
     public String vault_error;
     public String vault_noVaultPerm;
-    //faction plugin
-    public String plugin_faction_noVaultPerm;
-    public String plugin_faction_notInFaction;
-    //worldguard plugin
-    public String plugin_worldguard_noVaultPerm;
     //vault plugin
     public String plugin_vault_insufficientFunds;
     public String plugin_vault_insufficientSpace;
@@ -81,12 +86,38 @@ public enum Language {
         LANG.inv_balance = translator.apply(
                 "inv_balance",
                 "Inventory balance: %balance");
+        LANG.end_balance = translator.apply(
+                "end_balance",
+                "Enderchest balance: %balance");
         LANG.invalid_account = translator.apply(
                 "invalidaccount",
                 "Invalid account: %player");
         LANG.reload = translator.apply(
                 "reload",
                 "Gringotts: Reloaded configuration!");
+        LANG.hold_item = translator.apply(
+                "added_denomination",
+                "Added denomination %name");
+        LANG.hold_item = translator.apply(
+                "errors.holdItem",
+                "Please hold an item");
+
+        LANG.missing_value = translator.apply(
+                "errors.missingValue",
+                "Missing argument: denomination value");
+
+        LANG.invalid_value = translator.apply(
+                "errors.invalidValue",
+                "Invalid argument '%value' is not a valid number for denomination value");
+        LANG.denomination_name = translator.apply(
+                "errors.denominationName",
+                "Invalid argument '%value' is not a valid number for denomination value");
+        LANG.denomination_value = translator.apply(
+                "errors.denominationValue",
+                "Invalid argument '%value' is not a valid number for denomination value");
+        LANG.invalid_number = translator.apply(
+                "errors.invalidNumber",
+                "Invalid argument: '%value' is not a number!");
 
         //pay command
         LANG.pay_success_sender = translator.apply(
@@ -160,19 +191,6 @@ public enum Language {
         LANG.vault_error = translator.apply(
                 "vault.error",
                 "Failed to create vault.");
-
-        //faction plugin
-        LANG.plugin_faction_noVaultPerm = translator.apply(
-                "plugins.faction.noFactionVaultPerm",
-                "You do not have permission to create a faction vault here.");
-        LANG.plugin_faction_notInFaction = translator.apply(
-                "plugins.faction.notInFaction",
-                "Cannot create faction vault: You are not in a faction.");
-
-        //worldguard plugin
-        LANG.plugin_worldguard_noVaultPerm = translator.apply(
-                "plugins.worldguard.noFactionVaultPerm",
-                "You do not have permission to create a region vault here.");
 
         //vault plugin
         LANG.plugin_vault_insufficientFunds = translator.apply(

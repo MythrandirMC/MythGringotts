@@ -27,11 +27,11 @@ import org.gestern.gringotts.api.Eco;
 import org.gestern.gringotts.api.dependency.Dependency;
 import org.gestern.gringotts.api.dependency.DependencyProvider;
 import org.gestern.gringotts.api.impl.GringottsEco;
-import org.gestern.gringotts.api.impl.ReserveConnector;
 import org.gestern.gringotts.api.impl.VaultConnector;
 import org.gestern.gringotts.commands.GringottsExecutor;
 import org.gestern.gringotts.commands.MoneyAdminExecutor;
 import org.gestern.gringotts.commands.MoneyExecutor;
+import org.gestern.gringotts.commands.VaultCommand;
 import org.gestern.gringotts.currency.Denomination;
 import org.gestern.gringotts.data.DAO;
 import org.gestern.gringotts.data.DerbyDAO;
@@ -118,12 +118,11 @@ public class Gringotts extends JavaPlugin {
             accounting = new Accounting();
             eco        = new GringottsEco();
 
-            if (!(this.dependencies.hasDependency("vault") ||
-                    this.dependencies.hasDependency("reserve"))) {
+            if (!(this.dependencies.hasDependency("vault"))) {
                 Bukkit.getPluginManager().disablePlugin(this);
 
                 getLogger().warning(
-                        "Neither Vault or Reserve was found. Other plugins may not be able to access Gringotts accounts."
+                        "Vault was not found. Other plugins may not be able to access Gringotts accounts."
                 );
 
                 return;
@@ -143,12 +142,6 @@ public class Gringotts extends JavaPlugin {
                 );
 
                 getLogger().info("Registered Vault interface.");
-            }
-
-            if (this.dependencies.hasDependency("reserve")) {
-                ReserveConnector.registerProviderSafely();
-
-                getLogger().info("Registered Reserve interface.");
             }
 
             registerMetrics();
@@ -193,12 +186,6 @@ public class Gringotts extends JavaPlugin {
                 "Vault",
                 "net.milkbowl.vault.Vault",
                 "1.7"
-        );
-        this.registerGenericDependency(
-                "reserve",
-                "Reserve",
-                "net.tnemc.core.Reserve",
-                "0.1.5.0"
         );
 
         this.dependencies.onLoad();
@@ -302,6 +289,7 @@ public class Gringotts extends JavaPlugin {
     }
 
     private void registerCommands() {
+        registerCommand("vault", new VaultCommand());
         registerCommand(new String[]{"balance", "money"}, new MoneyExecutor());
         registerCommand("moneyadmin", new MoneyAdminExecutor());
         registerCommand("gringotts", new GringottsExecutor(this));
